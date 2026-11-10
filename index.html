@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Student Complaint System</title>
+<meta name="theme-color" content="#2255ff"><link rel="manifest" href="manifest.json">
+<style>
+:root{--bg:#eef3fb;--card:#fff;--tx:#14233b;--mu:#62728a;--ac:#2255ff;--tl:#00a8b5;--bd:#dbe4f2;--ok:#0a8a5a;--wa:#c27800;--er:#d6432f;--g:linear-gradient(135deg,#2255ff,#00b3c0);--sh:0 4px 16px rgba(15,33,74,.08)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1526;--card:#16223a;--tx:#e8eefb;--mu:#9fb0cc;--ac:#7b98ff;--tl:#2cc7d3;--bd:#2a3a58;--ok:#37c58f;--wa:#f0b04a;--er:#ff7b6b}}
+*{box-sizing:border-box}html{height:100%}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;max-width:640px;margin-inline:auto;min-height:100%;padding-bottom:72px}
+.hide{display:none!important}
+.hero{background:var(--g);color:#fff;padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;display:flex;align-items:center;gap:12px;border-radius:0 0 18px 18px}
+.av{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.25);display:grid;place-items:center;font-weight:700;font-size:18px;flex:none}
+.hero .tt{flex:1;min-width:0}.hero h1{margin:0;font-size:17px;line-height:1.2}.hero p{margin:1px 0 0;opacity:.85;font-size:12px}
+.out{background:rgba(255,255,255,.2);border:0;color:#fff;border-radius:16px;padding:6px 11px;font-size:12px;flex:none}
+.pb{position:relative;flex:1;overflow:hidden;margin:0;font-size:14px}.pb input{position:absolute;inset:0;opacity:0;width:100%;height:100%;font-size:0}
+main{padding:14px 14px 0}
+input[type=file]{padding:8px;font-size:14px}input[type=file]::file-selector-button{background:var(--g);color:#fff;border:0;border-radius:10px;padding:9px 14px;margin-right:10px;font-weight:600}
+.card{background:var(--card);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:var(--sh);border:1px solid var(--bd)}
+h2{font-size:17px;margin:0 0 10px}label{display:block;font-weight:600;font-size:13px;margin:12px 0 5px;color:var(--mu)}
+input,select,textarea{width:100%;padding:12px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx);font-size:16px;font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--ac)}
+.btn{width:100%;margin-top:14px;padding:14px;border:0;border-radius:14px;background:var(--g);color:#fff;font-size:16px;font-weight:700;box-shadow:0 6px 14px rgba(34,85,255,.25)}
+.btn.s{width:auto;margin:0;padding:8px 12px;font-size:13px;box-shadow:none}.btn.g{background:var(--bg);color:var(--tx);border:1px solid var(--bd);box-shadow:none}
+.auth{padding:calc(40px + env(safe-area-inset-top,0px)) 16px 30px}.logo{width:72px;height:72px;border-radius:22px;background:var(--g);display:grid;place-items:center;font-size:36px;margin:0 auto 12px}
+.auth h1{text-align:center;margin:0;font-size:24px}.auth .sub{text-align:center;color:var(--mu);margin:4px 0 18px;font-size:14px}
+.seg{display:flex;background:var(--bg);border-radius:12px;padding:4px;margin-bottom:6px}.seg button{flex:1;border:0;padding:10px;border-radius:9px;background:none;color:var(--mu);font-size:15px;font-weight:700}.seg .on{background:#fff;color:var(--ac);box-shadow:0 1px 5px rgba(17,24,39,.08)}
+.err{color:var(--er);font-size:13px;margin-top:8px;min-height:18px}
+.lnk{display:block;text-align:center;margin-top:14px;color:var(--mu);font-size:13px;background:none;border:0;width:100%}
+.nav{position:fixed;left:0;right:0;bottom:0;max-width:640px;margin-inline:auto;display:flex;background:var(--card);border-top:1px solid var(--bd);padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));z-index:10}
+.nav button{flex:1;border:0;background:none;color:var(--mu);font-size:11px;padding:4px;display:flex;flex-direction:column;align-items:center;gap:2px}.nav button span{font-size:22px}.nav .on{color:var(--ac)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}.stats div{background:var(--card);border-radius:14px;padding:10px 2px;text-align:center;font-size:11px;color:var(--mu);border:1px solid var(--bd)}.stats b{display:block;color:var(--tx);font-size:20px;margin-bottom:2px}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:700;color:#fff;white-space:nowrap}
+.Pending{background:#7a8aa3}.In-Progress{background:var(--ac)}.Resolved{background:var(--ok)}.Escalated{background:var(--er)}
+.High{color:var(--er)}.Medium{color:var(--wa)}.Low{color:var(--ok)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}.mu{color:var(--mu);font-size:13px}
+.bar{height:12px;background:var(--bd);border-radius:8px;overflow:hidden;margin:4px 0 10px}.bar i{display:block;height:100%;background:var(--g);border-radius:8px}
+.item{border-top:1px solid var(--bd);padding:12px 0}.item:first-child{border-top:0;padding-top:0}
+.msg{padding:12px;border-radius:12px;margin-top:12px;font-size:14px;background:rgba(0,179,192,.12);border:1px solid var(--tl)}.msg.w{background:rgba(194,120,0,.12);border-color:var(--wa)}
+.photo{display:flex;align-items:center;justify-content:center;gap:8px;border:2px dashed var(--bd);border-radius:14px;padding:16px;color:var(--ac);font-weight:600;background:var(--bg)}
+.thumb{width:100%;max-height:200px;object-fit:cover;border-radius:12px;margin-top:8px}
+.steps{display:flex;margin:12px 0 4px}.steps div{flex:1;text-align:center;font-size:11px;color:var(--mu)}.steps div:before{content:"";display:block;width:20px;height:20px;border-radius:50%;background:var(--bd);margin:0 auto 6px}.steps div.d{color:var(--ac)}.steps div.d:before{background:var(--g)}
+.how{display:flex;gap:8px;text-align:center}.how div{flex:1;font-size:12px;color:var(--mu)}.how span{display:grid;place-items:center;font-size:24px;width:48px;height:48px;border-radius:16px;background:rgba(34,85,255,.08);margin:0 auto 8px}
+.acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.roleGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.roleCard{border:1px solid var(--bd);border-radius:16px;background:var(--bg);padding:14px;text-align:center;color:var(--tx);display:flex;flex-direction:column;align-items:center;gap:4px;min-height:110px}.roleCard span{font-size:28px}.roleCard b{font-size:15px}.roleCard small{color:var(--mu);line-height:1.3}.roleCard.wide{grid-column:1/-1}
+</style></head><body>
+
+<div id="auth" class="auth">
+<div class="logo">🏫</div><h1>Student Complaint System</h1><p class="sub">A smarter, transparent way to solve campus issues.</p>
+<div id="rolePick" class="card"><h2 style="text-align:center">Continue as</h2><div class="roleGrid">
+<button class="roleCard" onclick="chooseRole('student')"><span>🎓</span><b>Student</b><small>Register and submit complaints</small></button>
+<button class="roleCard" onclick="chooseRole('admin')"><span>📊</span><b>Admin</b><small>Dashboard, graphs and campus data</small></button>
+<button class="roleCard wide" onclick="chooseRole('department')"><span>🛠️</span><b>Department Management</b><small>View complaints assigned to your department</small></button></div></div>
+<div id="loginBox" class="card hide"><button class="lnk" style="margin:0 0 8px" onclick="backRoles()">← Change role</button><h2 id="roleTitle">Student Access</h2>
+<div class="seg"><button id="s1" class="on" onclick="authTab(1)">Register</button><button id="s2" onclick="authTab(2)">Sign in</button></div>
+<div id="rn"><label id="nameLabel">Full name</label><input id="rname" placeholder="Enter your full name" autocomplete="name"></div>
+<div id="afnWrap"><label>AFN No</label><input id="afn" placeholder="Your AFN number" autocomplete="off"></div>
+<div id="deptWrap" class="hide"><label>Department</label><select id="deptSelect"></select></div>
+<label>College ID</label><input id="cid" placeholder="Your college ID" autocomplete="off"><div class="err" id="aerr"></div>
+<button class="btn" id="abtn" onclick="doAuth()">Create account</button>
+<p class="mu" style="margin:10px 0 0">Prototype: account details are stored in this browser. Secure server-side login is required before real deployment.</p></div></div>
+<div id="app" class="hide">
+<div class="hero"><div class="av" id="av">K</div><div class="tt"><h1 id="hi">Hi</h1><p id="sub"></p></div><button class="out" onclick="logout()">Log out</button></div>
+<main>
+<section id="v-home">
+<div class="stats" id="hs"></div>
+<div class="card"><h2>Something wrong on campus?</h2><p class="mu" style="margin-top:0">Report Wi-Fi, water, lab, hostel or equipment problems in under a minute.</p><button class="btn" style="margin-top:10px" onclick="go('new')">Report a problem</button></div>
+<div class="card"><h2>How it works</h2><div class="how"><div><span>📝</span>Submit</div><div><span>🧭</span>Route</div><div><span>🔧</span>Update</div><div><span>📍</span>Track</div></div></div>
+</section>
+
+<section id="v-new" class="hide"><div class="card"><h2>New complaint</h2>
+<label>Issue type</label><select id="ct"></select>
+<label>Location</label><input id="lc" placeholder="e.g. Lab 3, Hostel B, Library">
+<label>What is the problem?</label><textarea id="ds" rows="3" placeholder="Describe the problem"></textarea>
+<label>Photo of the damage (optional)</label>
+<input id="photoInput" type="file" accept="image/*" hidden onchange="pick(this)">
+<button class="btn g" type="button" onclick="document.getElementById('photoInput').click()">📷 Take photo / Choose from phone</button>
+<p class="mu" style="margin:6px 0 0">Choose Camera to take a new photo or Gallery/Photos to select an existing one.</p><div id="pv"></div>
+<button class="btn" onclick="submitC()">Submit complaint</button><div id="res"></div></div></section>
+
+<section id="v-mine" class="hide"><div id="mine"></div></section>
+
+<section id="v-admin" class="hide">
+<div class="stats" id="as"></div>
+<div class="card"><h2>Complaint trends</h2><p class="mu" id="trendTitle"></p><div class="graph" id="trend"></div><p class="mu">Daily complaint count based on submission date.</p></div>
+<div class="card"><h2>Department workload</h2><div id="ch"></div></div>
+<div class="card"><h2>Auto-escalation</h2><p class="mu" style="margin-top:0">Complaints not solved in time (High 24h, Medium 48h, Low 72h) go to the HOD automatically.</p><div class="row"><button class="btn s" onclick="skewT(12)">Advance time +12h</button><button class="btn s g" onclick="skewT(0,true)">Reset clock</button></div><p class="mu" id="sk" style="margin:10px 0 0"></p></div>
+<div class="card"><h2>All complaints</h2><div id="ls"></div></div>
+<button class="btn g" onclick="resetD(this)">Reset demo data</button>
+</section>
+<section id="v-department" class="hide"><div class="card"><h2>Department complaints</h2><p class="mu" id="deptIntro"></p><div id="deptList"></div></div></section>
+</main>
+<nav class="nav" id="nav"></nav>
+</div>
+
+<script>
+const C={wifi:{l:"Wi-Fi / Internet",d:"IT Department",p:"Medium"},water:{l:"Water / Facility damage",d:"Maintenance Department",p:"High"},lab:{l:"Projector / Computer",d:"Technical Lab Department",p:"High"},hostel:{l:"Hostel / Living conditions",d:"Hostel Administration",p:"Medium"},equip:{l:"Equipment / Furniture",d:"Administration",p:"Low"}};
+const SLA={High:24,Medium:48,Low:72},H=36e5,K1="csys2_data",K2="csys2_users",K3="csys2_session";
+let S,U=null,photo="",mode=1;
+const $=i=>document.getElementById(i);
+function esc(s){return String(s==null?"":s).replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]))}
+function rd(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+function wr(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function seed(){const n=Date.now(),m=(i,c,lc,ds,st,ago,res,dups)=>({id:"C-"+i,by:"Student",afn:"-",cat:c,lc,ds,pri:C[c].p,dept:C[c].d,st,t:n-ago*H,res:res||0,dups:dups||0,img:""});
+return{skew:0,next:1010,list:[m(1001,"wifi","Library","Wi-Fi not working","Resolved",60,8,5),m(1002,"wifi","Hostel A","Very slow internet","In Progress",10,0,3),m(1003,"water","Hostel B","Water leak from pipe","Pending",8,0,1),m(1004,"lab","Lab 3","Projector flickers during lecture","Resolved",20,6,2),m(1005,"hostel","Room 204","AC not cooling","Pending",2,0,0),m(1006,"equip","Library Desk","Broken chair","In Progress",3,0,1),m(1007,"water","Canteen","Drainage issue near kitchen","Pending",14,0,0),m(1008,"wifi","Academic Block","Internet drops in corridor","Pending",4,0,0)]}};
+function now(){return Date.now()+S.skew*H}
+function sv(){wr(K1,S)}
+let selectedRole="student";
+const DEPTS=[...new Set(Object.values(C).map(x=>x.d))];
+function chooseRole(r){selectedRole=r;$("rolePick").classList.add("hide");$("loginBox").classList.remove("hide");$("roleTitle").textContent=r=="student"?"🎓 Student Access":r=="admin"?"📊 Admin Access":"🛠️ Department Access";$("nameLabel").textContent=r=="department"?"Manager name":"Full name";$("afnWrap").classList.toggle("hide",r!="student");$("deptWrap").classList.toggle("hide",r!="department");$("abtn").textContent=r=="department"?"Open department dashboard":"Create account";$("aerr").textContent="";const dt=$("deptSelect");if(r=="department"){dt.innerHTML=DEPTS.map(d=>`<option value="${d}">${d}</option>`).join("");} }
+function backRoles(){$("loginBox").classList.add("hide");$("rolePick").classList.remove("hide")}
+function authTab(n){mode=n;$("s1").classList.toggle("on",n==1);$("s2").classList.toggle("on",n==2);$("rn").classList.toggle("hide",n==2);$("abtn").textContent=n==1?selectedRole=="department"?"Open department dashboard":"Create account":"Sign in";$("aerr").textContent="";if(selectedRole=="student"){$("afnWrap").classList.toggle("hide",n!=1);$("nameLabel").textContent="Full name";} }
+function doAuth(){
+ const nm=$("rname").value.trim(),afn=$("afn").value.trim().toUpperCase(),cid=$("cid").value.trim().toLowerCase(),dept=$("deptSelect").value,users=rd(K2,[]);
+ const savedCID=x=>String(x.cid||x.collegeId||x.collegeID||x.email||"").trim().toLowerCase();
+ const savedAFN=x=>String(x.afn||x.afnNo||x.afnNumber||"").trim().toUpperCase();
+ const savedRole=x=>x.role||(x.admin?"admin":"student");
+ if(cid.length<3||(mode==1&&nm.length<2)||(selectedRole=="student"&&afn.length<2)){$("aerr").textContent=selectedRole=="student"?"Please enter name, AFN number and college ID.":"Please enter name and college ID.";return}
+ if(selectedRole=="department"&&mode==1&&!dept){$("aerr").textContent="Please choose a department.";return}
+ let u;
+ if(mode==1){
+  if(selectedRole=="student"){
+   const existing=users.find(x=>savedRole(x)=="student"&&savedAFN(x)==afn);
+   if(existing){
+    if(savedCID(existing)==cid){start(existing);return}
+    if(!savedCID(existing)){existing.cid=cid;existing.role="student";wr(K2,users);start(existing);return}
+    $("aerr").textContent="This AFN is already registered with a different College ID. Switch to Sign in and use the registered ID.";return;
+   }
+  }else if(users.some(x=>savedRole(x)==selectedRole&&savedCID(x)==cid&&(selectedRole!="department"||x.dept==dept))){$("aerr").textContent="This account already exists. Please sign in.";return}
+  u=selectedRole=="student"?{nm,afn,cid,role:"student"}:{nm,cid,role:selectedRole,dept:selectedRole=="department"?dept:""};users.push(u);wr(K2,users);start(u);
+ }else{
+  u=users.find(x=>savedRole(x)==selectedRole&&savedCID(x)==cid&&(selectedRole!="student"||savedAFN(x)==afn)&&(selectedRole!="department"||x.dept==dept));
+  if(!u){const byAFN=selectedRole=="student"?users.find(x=>savedRole(x)=="student"&&savedAFN(x)==afn):null;$("aerr").textContent=byAFN?"AFN found, but the College ID does not match the registered account.":"No matching account found.";return}
+  start(u);
+ }
+}
+function start(u){U=u;wr(K3,u);$("auth").classList.add("hide");$("app").classList.remove("hide");$("av").textContent=u.nm.charAt(0).toUpperCase();$("hi").textContent="Hi, "+u.nm.split(" ")[0]+" 👋";$("sub").textContent=u.role=="student"?"Your complaint dashboard":u.role=="admin"?"Campus operations overview":"Department queue";$("nav").innerHTML=["home","new","mine","admin","department"].filter(v=>u.role=="student"?v!="admin"&&v!="department":u.role=="admin"?v!="new"&&v!="mine":true).map(v=>nb(v,{home:"🏠",new:"✍️",mine:"📦",admin:"📊",department:"🏢"}[v],{home:"Home",new:"New",mine:"Mine",admin:"Admin",department:"Dept"}[v])).join("");if(u.role=="student")go("home");else if(u.role=="admin")go("admin");else go("department");}
+function nb(v,i,l){return `<button id="n-${v}" onclick="go('${v}')"><span>${i}</span>${l}</button>`}
+function logout(){U=null;wr(K3,null);$("app").classList.add("hide");$("auth").classList.remove("hide");$("loginBox").classList.add("hide");$("rolePick").classList.remove("hide");["rname","afn","cid"].forEach(id=>$(id).value="");$("aerr").textContent="";}
+function go(v){["home","new","mine","admin","department"].forEach(x=>{const e=$("v-"+x);if(e)e.classList.toggle("hide",x!=v);const b=$("n-"+x);if(b)b.classList.toggle("on",x==v)});
+ if(v=="home")home();if(v=="mine")mine();if(v=="admin")admin();if(v=="department")departmentView();window.scrollTo(0,0)}
+function esc2(){S.list.forEach(c=>{if(c.st!="Resolved"&&c.st!="Escalated"&&(now()-c.t)/H>SLA[c.pri])c.st="Escalated"})}
+function fmtTime(t){return new Date(t).toLocaleString([], {dateStyle:"medium",timeStyle:"short"})}
+function mineL(){return S.list.filter(c=>c.afn==U.afn&&c.afn!="-")}
+function home(){esc2();const L=mineL(),n=s=>L.filter(c=>c.st==s).length;
+ $("hs").innerHTML=[["Total",L.length],["Pending",n("Pending")],["In progress",n("In Progress")],["Resolved",n("Resolved")]].map(a=>`<div><b>${a[1]}</b>${a[0]}</div>`).join("")}
+function pick(inp){const f=inp.files&&inp.files[0];if(!f)return;const pv=$("pv");pv.innerHTML='<p class="mu">Reading photo…</p>';
+const u=URL.createObjectURL(f),im=new Image();
+im.onload=()=>{try{const k=Math.min(1,560/Math.max(im.width,im.height)),cv=document.createElement("canvas");cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);cv.getContext("2d").drawImage(im,0,0,cv.width,cv.height);cv.toBlob(blob=>{if(blob){const r=new FileReader();r.onload=()=>{photo=r.result;pv.innerHTML=`<img class="thumb" src="${photo}"><button class="btn g" type="button" onclick="rmPhoto()">Remove photo</button>`};r.readAsDataURL(blob)}},"image/jpeg",.82)}catch(e){pv.innerHTML='<div class="msg w">This photo could not be read. Try the Gallery button or another photo.</div>'}}
+im.onerror=()=>{pv.innerHTML='<div class="msg w">This photo could not be read. Try the Gallery button or another photo.</div>'};
+im.src=u}
+function rmPhoto(){photo="";$("pv").innerHTML="";$("photoInput").value=""}
+function submitC(){
+ const cat=$("ct").value,lc=$("lc").value.trim(),ds=$("ds").value.trim(),r=$("res");
+ if(!lc||!ds){r.innerHTML='<div class="msg w">Please add the location and describe the problem.</div>';return}
+ const dup=S.list.find(c=>c.cat==cat&&c.lc.toLowerCase()==lc.toLowerCase()&&c.st!="Resolved");
+ if(dup){dup.dups++;sv();r.innerHTML=`<div class="msg w"><b>Similar complaint already exists.</b><br>We linked yours to <b>${dup.id}</b> so the team does not repeat the same work.</div>`;return}
+ let pri=C[cat].p;if(/leak|fire|spark|short|flood|urgent|no water|danger/i.test(ds))pri="High";
+ const id="C-"+(S.next++);
+ S.list.push({id,by:U.nm,afn:U.afn,cid:U.cid,cat,lc,ds,pri,dept:C[cat].d,st:"Pending",t:now(),res:0,dups:0,img:photo});sv();
+ $("ds").value="";rmPhoto();
+ r.innerHTML=`<div class="msg"><b>✅ Complaint submitted!</b><br>ID: <b>${id}</b><br>Sent to: <b>${C[cat].d}</b><br>Priority: <b class="${pri}">${pri}</b></div>`}
+function stp(c){const i=c.st=="Pending"?0:c.st=="Resolved"?2:1;return `<div class="steps">${["Submitted","In progress","Resolved"].map((s,k)=>`<div class="${k<=i?"d":""}">${s}</div>`).join("")}</div>`}
+function mine(){esc2();sv();const L=mineL().reverse();
+ $("mine").innerHTML=L.length?L.map(c=>`<div class="card"><div class="row"><b>${esc(c.id)} · ${esc(C[c.cat].l)}</b><span class="badge ${c.st.replace(" ","-")}">${c.st}</span></div><div class="mu">${esc(c.lc)} · ${esc(c.dept)}</div>${stp(c)}<p class="mu">Submitted ${fmtTime(c.t)}</p><div class="row"><span class="mu">Priority: <b class="${c.pri}">${c.pri}</b></span><span class="mu">${c.dups?`Duplicates: ${c.dups}`:""}</span></div>${c.img?`<img class="thumb" src="${c.img}">`:""}</div>`).join(""):'<div class="card"><p class="mu">No complaints yet.</p></div>'}
+function admin(){esc2();sv();const L=S.list,n=s=>L.filter(c=>c.st==s).length;
+ $("as").innerHTML=[["Total",L.length],["Pending",n("Pending")],["Escalated",n("Escalated")],["Resolved",n("Resolved")]].map(a=>`<div><b>${a[1]}</b>${a[0]}</div>`).join("");const daily=Array.from({length:7},(_,i)=>{const d=new Date(Date.now()- (6-i)*864e5); const key=d.toISOString().slice(0,10); return {day:key,count:L.filter(c=>new Date(c.t).toISOString().slice(0,10)==key).length};}); const mx=Math.max(1,...daily.map(x=>x.count)); $("trend").innerHTML=daily.map(x=>`<div><div class="bar"><i style="width:${(x.count/mx)*100}%"></i></div><small>${new Date(x.day).toLocaleDateString([], {month:"short",day:"numeric"})}</small></div>`).join(""); $("trendTitle").textContent=`Last 7 days · ${daily.reduce((a,b)=>a+b.count,0)} complaints logged`;
+ const ks=Object.keys(C),tot=k=>L.filter(c=>c.cat==k).reduce((a,c)=>a+1+c.dups,0),mx2=Math.max(1,...ks.map(tot));
+ $("ch").innerHTML="<p class='mu' style='margin-top:0'>Complaints (with duplicates) · average hours to resolve</p>"+ks.map(k=>{const rs=L.filter(c=>c.cat==k&&c.st=="Resolved"&&c.res),av=rs.length?rs.reduce((a,c)=>a+c.res,0)/rs.length:0; return `<div class="item"><div class="row"><b>${C[k].l}</b><span class="mu">${tot(k)} total</span></div><div class="bar"><i style="width:${(tot(k)/mx2)*100}%"></i></div><div class="mu">Avg resolve: ${av?av.toFixed(1):"0.0"}h</div></div>`;}).join("");
+ $("sk").textContent=S.skew?`Demo time moved forward by ${S.skew} hours.`:"";
+ $("ls").innerHTML=L.slice().reverse().map(c=>`<div class="item"><div class="row"><b>${esc(c.id)} · ${esc(C[c.cat].l)}</b><span class="badge ${c.st.replace(" ","-")}">${c.st}</span></div><div class="mu">${esc(c.by)} · ${esc(c.lc)} · ${esc(c.dept)}</div><div class="row"><span class="mu">Priority: <b class="${c.pri}">${c.pri}</b></span><span class="mu">${c.dups?`Duplicates: ${c.dups}`:""}</span></div>${c.st!="Resolved"?`<div class="acts"><button class="btn s" onclick="setS('${c.id}','In Progress')">In progress</button><button class="btn s" onclick="setS('${c.id}','Resolved')">Resolve</button><button class="btn s g" onclick="setS('${c.id}','Escalated')">Escalate</button></div>`:""}</div>`).join("")}
+function departmentView(){esc2();sv();const L=S.list.filter(c=>c.dept==U.dept).slice().reverse();$("deptIntro").textContent="Showing complaints routed to "+U.dept+"."; $("deptList").innerHTML=L.length?L.map(c=>`<div class="item"><div class="row"><b>${esc(c.id)} · ${esc(C[c.cat].l)}</b><span class="badge ${c.st.replace(" ","-")}">${c.st}</span></div><div class="mu">${esc(c.lc)}</div><div class="mu">${esc(c.by)} · ${fmtTime(c.t)}</div>${c.st!="Resolved"?`<div class="acts"><button class="btn s" onclick="setS('${c.id}','In Progress')">In progress</button><button class="btn s" onclick="setS('${c.id}','Resolved')">Resolve</button></div>`:""}</div>`).join(""):'<div class="card"><p class="mu">No complaints for this department yet.</p></div>'}
+function setS(id,s){const c=S.list.find(x=>x.id==id);if(!c)return; c.st=s;if(s=="Resolved")c.res=Math.max(1,Math.round((now()-c.t)/H));sv();admin(); if(U&&U.role=="department")departmentView(); if(U&&U.role=="student")home();}
+function skewT(h,z){S.skew=z?0:S.skew+h;if(z)S.list.forEach(c=>{if(c.st=="Escalated")c.st="Pending"});sv();admin()}
+function resetD(b){if(b.dataset.a){S=seed();sv();admin();b.dataset.a="";b.textContent="Reset demo data";return}b.dataset.a=1;b.textContent="Tap again to confirm";setTimeout(()=>{b.dataset.a="";b.textContent="Reset demo data"},1400)}
+S=rd(K1,null);if(!S||!S.list)S=seed();
+$("ct").innerHTML=Object.keys(C).map(k=>`<option value="${k}">${C[k].l}</option>`).join("");
+/* Show the role-selection screen whenever the app is opened. */
+</script></body></html>
